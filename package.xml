@@ -26,6 +26,7 @@
   <depend>geometry_msgs</depend>
   <depend>tf</depend>
   <depend>std_msgs</depend>
+  <depend>actionlib</depend>
 
 
   <!-- The export tag contains other, unspecified, tags -->

@@ -8,9 +8,12 @@
   <param name="publish_frequency" value="1000" />
   </node>
 
-  <node pkg="location_finder" type="publisher_node" name="publisher_node" output="screen" >
+  <node pkg="location_finder" type="send_location_node" name="send_location_node" output="screen" >
     <param name="publish_frequency" value="1000" />
   </node>
+
+   
+   
 
    <node pkg="tf" type="static_transform_publisher" name="link1_broadcaster" args="0 0 0.85 0 0.707 0 base_link camera_link 100" /> 
 

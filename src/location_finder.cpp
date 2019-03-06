@@ -1,10 +1,11 @@
-#include "ros/ros.h"
+#include <ros/ros.h>
 #include <tf/transform_broadcaster.h>
 #include <tf/transform_listener.h>
-#include "fiducial_msgs/FiducialTransformArray.h"
+#include <fiducial_msgs/FiducialTransformArray.h>
 #include <geometry_msgs/Transform.h>
 #include <std_msgs/Header.h>
 #include <geometry_msgs/Twist.h>
+
 
 class LocationFinder{
 public:
@@ -92,6 +93,7 @@ void Callback_2DOF(const geometry_msgs::PoseStamped::Ptr& msg){
 			ros::Rate rate(1000);
 			// rate.sleep();
 			marker_detected_ = true;
+
 			// Drive(transform_x,0);																		/// to drive or send velocity to robot
 			// detectAngle(transform_x,transform_y,yaw);							/// detect the orientation of the robot and compare it with the orientation from the marker
 
@@ -99,7 +101,8 @@ void Callback_2DOF(const geometry_msgs::PoseStamped::Ptr& msg){
 	}
 
 }
-// 
+
+//
 // 	void Drive(double x,double z){
 // 		pub = n.advertise<geometry_msgs::Twist>("cmd_vel",10);
 //
@@ -170,7 +173,6 @@ void Callback_2DOF(const geometry_msgs::PoseStamped::Ptr& msg){
 // 							 }
 //
 // 	}
-
 
 private:
 		double time;
