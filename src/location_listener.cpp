@@ -4,7 +4,7 @@
 #include <geometry_msgs/Pose.h>
 #include <geometry_msgs/PoseArray.h>
 
-#include <location_finder/Position_publish.h>
+//#include <location_finder/Position_publish.h>
 #include "fiducial_msgs/FiducialTransform.h"
 #include "fiducial_msgs/FiducialTransformArray.h"
 
@@ -38,7 +38,7 @@
         //listen to a transform from base link to the marker itself
         // Wait for up to one second for the first transforms to become avaiable.
         // Locationlistener.listener.waitForTransform("/base_link", "/marker_pose", ros::Time(0), ros::Duration(1.0));
-        Locationlistener.listener.lookupTransform("/base_link", "/marker_pose", ros::Time(0), echo_transform);
+        Locationlistener.listener.lookupTransform("/base_link", "/station_charger", ros::Time(0), echo_transform);
        }
        catch(tf::TransformException& ex)
        {

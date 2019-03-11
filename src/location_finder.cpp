@@ -49,7 +49,7 @@ public:
 			transform_base_camera.setRotation(tf::Quaternion(rotation_x,rotation_y,rotation_z,rotation_w));
 
 			// transform_base_camera.setRotation(tf::Quaternion(rotation_x,rotation_y,rotation_z,rotation_w));
-			br.sendTransform(tf::StampedTransform(transform_base_camera,ros::Time(time),"camera_color_optical_frame","marker_pose"));
+			br.sendTransform(tf::StampedTransform(transform_base_camera,ros::Time(time),"camera_color_optical_frame","station_charger"));
 
 			ros::Rate rate(1000);
 			// rate.sleep();
@@ -74,7 +74,7 @@ void Callback_2DOF(const geometry_msgs::PoseStamped::Ptr& msg){
 		}
 		else{
 		/// when the marker is detected
-
+			marker_detected_ = true;
 			///obtain the pose
 			geometry_msgs::Pose pose;
 			double transform_x = msg->pose.position.x;
@@ -89,10 +89,10 @@ void Callback_2DOF(const geometry_msgs::PoseStamped::Ptr& msg){
 			w.setRPY(0,0,yaw);  // set the 2DOF orientation in Roll Pitch and Yaw. The orientation needed is only the yaw.
 			transform_base_marker.setRotation(w);
 		// transform_base_camera.setRotation(tf::Quaternion(rotation_x,rotation_y,rotation_z,rotation_w));
-			br.sendTransform(tf::StampedTransform(transform_base_marker,ros::Time(time),"base_link","station_charger"));
+			br.sendTransform(tf::StampedTransform(transform_base_marker,ros::Time(time),"base_link","station_charger_transformed"));
 			ros::Rate rate(1000);
 			// rate.sleep();
-			marker_detected_ = true;
+			
 
 			// Drive(transform_x,0);																		/// to drive or send velocity to robot
 			// detectAngle(transform_x,transform_y,yaw);							/// detect the orientation of the robot and compare it with the orientation from the marker
@@ -102,77 +102,6 @@ void Callback_2DOF(const geometry_msgs::PoseStamped::Ptr& msg){
 
 }
 
-//
-// 	void Drive(double x,double z){
-// 		pub = n.advertise<geometry_msgs::Twist>("cmd_vel",10);
-//
-// 		double speed_x = 0.1 * x; double speed_y = 0.1;
-// 		double speed = 0.01;
-// 		if (x > 0.3) {
-// 			go = true;
-// 			std::cout << "it's true!!" << '\n';
-// 			velocity.linear.x = speed_x;
-// 			velocity.linear.y = 0 * speed_y;
-// 			velocity.linear.z = 0 * speed;
-//
-// 			velocity.angular.x = 0;
-// 			velocity.angular.y = 0;
-// 			velocity.angular.z = z;
-// 			}
-// 		else{
-// 			go = false;
-// 			velocity.linear.x = 0.0001;
-// 			velocity.linear.y = 0.0001 * speed;
-// 			velocity.linear.z = 0 * speed;
-//
-// 			velocity.angular.x = 0;
-// 			velocity.angular.y = 0;
-// 			velocity.angular.z = z;
-// 		}
-//
-// 		std::cout << velocity << std::endl;
-//    	// pub.publish(velocity);
-//
-//
-// 	}
-//
-// 	void detectAngle(double x, double y, double yaaw)
-// 	{
-//
-// 		tf::StampedTransform robot_transform;
-// 		geometry_msgs::PoseStamped rp;
-// 		try{
-// 			  listener.lookupTransform("/odom","/base_link",ros::Time(0),robot_transform);
-// 			 }
-// 		catch(tf::TransformException& ex)
-// 			 {
-// 			 	ROS_ERROR("%s",ex.what());
-// 			 	ros::Duration(0.1).sleep();
-//
-// 			 }
-// 			         // echo_transform.getBasis().getRPY(roll, pitch, yaw);
-// 			         tf::Quaternion qt = robot_transform.getRotation();
-// 			         tf::Vector3 vt = robot_transform.getOrigin();
-// 			         geometry_msgs::Pose pose;
-// 			         // fiducial_msgs::FiducialTransform ft;
-// 			         rp.pose.position.x = vt.getX();
-// 			         rp.pose.position.y = vt.getY();
-// 			         rp.pose.position.z = 0;
-//
-// 							 double yaw= tf::getYaw(qt);
-// 							 std::cout << "yawnya robot " << yaw << '\n';
-// 							 std::cout << "xnya robot " << rp.pose.position.x << '\n';
-// 							 std::cout << "ynya robot" << rp.pose.position.y << '\n';
-// 							 if (yaw == yaaw) {
-// 							 	allow_rotation_ == false;
-// 									Drive(0,0);
-// 							 }
-// 							 else {
-// 								 allow_rotation_ == true;
-// 								 	Drive(0,0.5);
-// 							 }
-//
-// 	}
 
 private:
 		double time;

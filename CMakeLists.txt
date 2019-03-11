@@ -73,7 +73,7 @@ add_executable(location_finder_node src/location_finder.cpp)
 
 add_executable(location_listener_node src/location_listener.cpp)
 
-add_executable(send_location_node src/send_location.cpp)
+
 
 # add_executable(publisher_node src/2DOF_publisher.cpp)
 
@@ -84,7 +84,7 @@ add_dependencies(location_finder_node location_finder_generate_messages.cpp)
 
 add_dependencies(location_listener_node location_listener_generate_messages.cpp)
 
-add_dependencies(send_location_node send_location_generate_messages.cpp)
+
 
 # add_dependencies(publisher_node publisher_generate_messages.cpp)
 
@@ -97,9 +97,8 @@ add_dependencies(send_location_node send_location_generate_messages.cpp)
  	${catkin_LIBRARIES}
  )
 
- target_link_libraries(send_location_node
-   ${catkin_LIBRARIES}
- )
+
+ 
 # target_link_libraries(publisher_node
 #  	${catkin_LIBRARIES}
 #  )

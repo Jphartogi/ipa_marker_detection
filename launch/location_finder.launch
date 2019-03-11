@@ -8,13 +8,7 @@
   <param name="publish_frequency" value="1000" />
   </node>
 
-  <node pkg="location_finder" type="send_location_node" name="send_location_node" output="screen" >
-    <param name="publish_frequency" value="1000" />
-  </node>
-
    
-   
-
    <node pkg="tf" type="static_transform_publisher" name="link1_broadcaster" args="0 0 0.85 0 0.707 0 base_link camera_link 100" /> 
 
   <node type="rviz" name="rviz" pkg="rviz" args="-d $(find location_finder)/rviz/location_finder.rviz"/>
@@ -30,17 +24,17 @@
   <arg name="depth_height"        default="480"/>
   <arg name="enable_depth"        default="true"/>
 
-  <arg name="infra1_width"        default="640"/>
-  <arg name="infra1_height"       default="480"/>
+  <arg name="infra_width"         default="640"/>
+  <arg name="infra_height"        default="480"/>
   <arg name="enable_infra1"       default="false"/>
-
-  <arg name="infra2_width"        default="640"/>
-  <arg name="infra2_height"       default="480"/>
   <arg name="enable_infra2"       default="false"/>
+
 
   <arg name="color_width"         default="640"/>
   <arg name="color_height"        default="480"/>
   <arg name="enable_color"        default="true"/>
+  
+
 
   	</include>
 
