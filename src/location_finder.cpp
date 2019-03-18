@@ -1,15 +1,10 @@
-#include <ros/ros.h>
-#include <tf/transform_broadcaster.h>
-#include <tf/transform_listener.h>
-#include <fiducial_msgs/FiducialTransformArray.h>
-#include <geometry_msgs/Transform.h>
-#include <std_msgs/Header.h>
-#include <geometry_msgs/Twist.h>
+#include <location_finder/location_finder.h>
+
+namespace ipa_location_finder
+{
 
 
-class LocationFinder{
-public:
-	void Callback(const fiducial_msgs::FiducialTransformArray::Ptr& msg){
+void LocationFinder::Callback(const fiducial_msgs::FiducialTransformArray::Ptr& msg){
 		/// check if the message is empty
 		if (msg->transforms.empty())
 		{
@@ -49,16 +44,15 @@ public:
 			transform_base_camera.setRotation(tf::Quaternion(rotation_x,rotation_y,rotation_z,rotation_w));
 
 			// transform_base_camera.setRotation(tf::Quaternion(rotation_x,rotation_y,rotation_z,rotation_w));
-			br.sendTransform(tf::StampedTransform(transform_base_camera,ros::Time(time),"camera_color_optical_frame","station_charger"));
+			br.sendTransform(tf::StampedTransform(transform_base_camera,ros::Time(time),"camera_color_optical_frame","marker_pose"));
 
 			ros::Rate rate(1000);
 			// rate.sleep();
 			marker_detected_ = true;
-
 		}
 	}
 
-void Callback_2DOF(const geometry_msgs::PoseStamped::Ptr& msg){
+void LocationFinder::Callback_2DOF(const geometry_msgs::PoseStamped::Ptr& msg){
 	// int transform[] = {};
 
 		/// check if no marker has detected yet
@@ -79,7 +73,6 @@ void Callback_2DOF(const geometry_msgs::PoseStamped::Ptr& msg){
 			geometry_msgs::Pose pose;
 			double transform_x = msg->pose.position.x;
 			double transform_y = msg->pose.position.y;
-
 			double yaw= tf::getYaw(msg->pose.orientation);
 
 			tf::TransformBroadcaster br;
@@ -89,42 +82,12 @@ void Callback_2DOF(const geometry_msgs::PoseStamped::Ptr& msg){
 			w.setRPY(0,0,yaw);  // set the 2DOF orientation in Roll Pitch and Yaw. The orientation needed is only the yaw.
 			transform_base_marker.setRotation(w);
 		// transform_base_camera.setRotation(tf::Quaternion(rotation_x,rotation_y,rotation_z,rotation_w));
-			br.sendTransform(tf::StampedTransform(transform_base_marker,ros::Time(time),"base_link","station_charger_transformed"));
+			br.sendTransform(tf::StampedTransform(transform_base_marker,ros::Time(time),"base_link","station_charger"));
 			ros::Rate rate(1000);
 			// rate.sleep();
-			
-
-			// Drive(transform_x,0);																		/// to drive or send velocity to robot
-			// detectAngle(transform_x,transform_y,yaw);							/// detect the orientation of the robot and compare it with the orientation from the marker
-
-			// std::cout << "the distance x is " << transform_x << '\n';
+		
 	}
 
 }
-
-
-private:
-		double time;
-		tf::Transform transform_;
-		bool marker_detected_;
-		bool allow_rotation_;
-		bool go;
-		ros::NodeHandle n;
-		ros::Publisher pub;
-		tf::TransformListener listener;
-		geometry_msgs::Twist velocity;
-
-
-};
-
-int main(int argc,char *argv[]){
-	ros::init(argc,argv,"location_finder");
-	ros::NodeHandle nh;
-	LocationFinder location;
-
-	ros::Subscriber sub = nh.subscribe("fiducial_transforms",10,&LocationFinder::Callback,&location); //subscribe to a publish message from fiducial transforms which is published from the aruco_detect
-	ros::Subscriber sub2 = nh.subscribe("Position",10,&LocationFinder::Callback_2DOF,&location); // subscribe to a publish message from a Position , that is published in location_listener.cpp
-
-  ros::spin();
-	return 0;
+	
 }

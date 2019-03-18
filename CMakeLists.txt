@@ -28,11 +28,6 @@ find_package(catkin REQUIRED
 
 
 
-# Generate messages in the 'msg' folder
-add_message_files(
-  FILES
- Position_publish.msg
-)
 
 
 ## Generate added messages and services with any dependencies listed here
@@ -68,41 +63,35 @@ include
 ${catkin_INCLUDE_DIRS}
 )
 
-
-add_executable(location_finder_node src/location_finder.cpp)
-
-add_executable(location_listener_node src/location_listener.cpp)
-
-
-
-# add_executable(publisher_node src/2DOF_publisher.cpp)
-
-
-## Add cmake target dependencies of the executable
-## same as for the library above
-add_dependencies(location_finder_node location_finder_generate_messages.cpp)
-
-add_dependencies(location_listener_node location_listener_generate_messages.cpp)
-
-
-
-# add_dependencies(publisher_node publisher_generate_messages.cpp)
+add_library(${PROJECT_NAME}
+  src/location_listener.cpp
+  src/service_caller.cpp
+  src/location_finder.cpp
+)
+add_executable(${PROJECT_NAME}_node src/location_finder_node.cpp)
+add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
- target_link_libraries(location_finder_node
+
+target_link_libraries(location_finder_node
+   ${PROJECT_NAME}
    ${catkin_LIBRARIES}
  )
 
- target_link_libraries(location_listener_node
- 	${catkin_LIBRARIES}
+ ## Mark executables and/or libraries for installation
+  install(TARGETS ${PROJECT_NAME} ${PROJECT_NAME}_node
+    ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+    LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+    RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+  )
+
+ ## Mark cpp header files for installation
+  install(DIRECTORY include/${PROJECT_NAME}/
+    DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
+    FILES_MATCHING PATTERN "*.h"
+    PATTERN ".svn" EXCLUDE
+  )
+
+ install(DIRECTORY launch
+   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
  )
-
-
- 
-# target_link_libraries(publisher_node
-#  	${catkin_LIBRARIES}
-#  )
-
-
-
-
