@@ -1,9 +1,27 @@
-#include <location_finder/location_finder.h>
+#include <ros/ros.h>
+#include <cob_srvs/SetString.h>
+#include <cstdlib>
+#include <fiducial_msgs/FiducialTransformArray.h>
+#include <fiducial_msgs/FiducialTransform.h>
+#include <fiducial_msgs/FiducialArray.h>
 
 
-
-namespace ipa_location_finder
+class ServiceCaller
 {
+private:
+   ros::Subscriber sub;
+   void Callservice();
+   void Callback(const fiducial_msgs::FiducialTransformArray::Ptr& msg);
+   ros::ServiceClient client;
+public:
+    ServiceCaller(ros::NodeHandle nh)
+    {
+    sub = nh.subscribe("fiducial_transforms",10,&ServiceCaller::Callback,this); //subscribe to a publish message from fiducial transforms which is published from the aruco_detect
+    client =  nh.serviceClient<cob_srvs::SetString>("/docker_control/dock");
+    }
+  
+};
+
 
 void ServiceCaller::Callservice(){
 
@@ -28,10 +46,19 @@ void ServiceCaller::Callback(const fiducial_msgs::FiducialTransformArray::Ptr& m
 		}
 		else{
 		/// when the marker is detected
-        Callservice();
+//        Callservice();
         }
 
 }
+int main(int argc,char** argv){
+	ros::init(argc,argv,"location_finder");
+	ros::NodeHandle nh;
+	
+	ServiceCaller ServiceCaller(nh);
+	
+	ros::spin();
+	return 0;
 }
+
 
 

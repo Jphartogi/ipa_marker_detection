@@ -65,10 +65,10 @@ ${catkin_INCLUDE_DIRS}
 
 add_library(${PROJECT_NAME}
   src/location_listener.cpp
-  src/service_caller.cpp
   src/location_finder.cpp
 )
 add_executable(${PROJECT_NAME}_node src/location_finder_node.cpp)
+
 add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
@@ -77,6 +77,18 @@ target_link_libraries(location_finder_node
    ${PROJECT_NAME}
    ${catkin_LIBRARIES}
  )
+
+add_executable(service_caller_node src/service_caller.cpp)
+
+add_dependencies(service_caller_node service_caller_generate_messages.cpp)
+
+## Specify libraries to link a library or executable target against
+
+target_link_libraries(service_caller_node
+  ${catkin_LIBRARIES}
+ )
+
+
 
  ## Mark executables and/or libraries for installation
   install(TARGETS ${PROJECT_NAME} ${PROJECT_NAME}_node

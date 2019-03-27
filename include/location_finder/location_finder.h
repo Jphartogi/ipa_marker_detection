@@ -15,48 +15,49 @@
 #include <geometry_msgs/Pose.h>
 #include <geometry_msgs/PoseArray.h>
 
+#include "std_srvs/SetBool.h"
+
 namespace ipa_location_finder
 {
 
 class LocationListener
 {
 private:
-  double time;
   ros::Publisher pub;
   ros::Subscriber sub;
   tf::TransformListener listener;
+  tf::TransformListener curr_listener;
+  ros::ServiceServer service;
+  ros::Publisher twist_publisher_;
+
+  double time;
+  bool do_fix_ori;
+  bool orientation_fixed;
+  bool position_fixed;
+  bool goal_reached;
   void Callback(const fiducial_msgs::FiducialTransformArray::Ptr& msg);
+  
+  void orientationAdjust();
+  void approachToGoal(double x,double y);
   void listenToTF();
+  bool check_ori_srv(std_srvs::SetBool::Request &req,
+                      std_srvs::SetBool::Response &res );
   
 public:
     LocationListener(ros::NodeHandle nh){
     pub = nh.advertise<geometry_msgs::PoseStamped>("Position", 10);
-   sub = nh.subscribe("fiducial_transforms",10,&LocationListener::Callback,this); //subscribe to a publish message from fiducial transforms which is published from the aruco_detect
+    sub = nh.subscribe("fiducial_transforms",10,&LocationListener::Callback,this); //subscribe to a publish message from fiducial transforms which is published from the aruco_detect
+    do_fix_ori = false;
+    orientation_fixed = false;
+    position_fixed = false;
+    goal_reached = false;
+    service = nh.advertiseService("orientation_fix", &LocationListener::check_ori_srv,this);
+    twist_publisher_ = nh.advertise<geometry_msgs::Twist>("cmd_vel", 10);
     }
    
 };
 
-
-
-class ServiceCaller
-{
-private:
-   ros::Subscriber sub;
-   void Callservice();
-   void Callback(const fiducial_msgs::FiducialTransformArray::Ptr& msg);
-   ros::ServiceClient client;
-public:
-    ServiceCaller(ros::NodeHandle nh)
-    {
-    sub = nh.subscribe("fiducial_transforms",10,&ServiceCaller::Callback,this); //subscribe to a publish message from fiducial transforms which is published from the aruco_detect
-    client =  nh.serviceClient<cob_srvs::SetString>("/docker_control/dock");
-    }
-  
-};
-
-
-
-class LocationFinder : public LocationListener, public ServiceCaller
+class LocationFinder : public LocationListener
 {
 private:
 //from location finder
@@ -76,7 +77,7 @@ private:
 
 
 public:
-    LocationFinder(ros::NodeHandle nh):LocationListener(nh), ServiceCaller(nh)
+    LocationFinder(ros::NodeHandle nh):LocationListener(nh)
     {
     sub = nh.subscribe("fiducial_transforms",10,&LocationFinder::Callback,this); //subscribe to a publish message from fiducial transforms which is published from the aruco_detect
 	sub2 = nh.subscribe("Position",10,&LocationFinder::Callback_2DOF,this); // subscribe to a publish message from a Position , that is published in location_listener.cpp

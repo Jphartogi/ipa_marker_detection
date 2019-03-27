@@ -82,12 +82,14 @@ void LocationFinder::Callback_2DOF(const geometry_msgs::PoseStamped::Ptr& msg){
 			w.setRPY(0,0,yaw);  // set the 2DOF orientation in Roll Pitch and Yaw. The orientation needed is only the yaw.
 			transform_base_marker.setRotation(w);
 		// transform_base_camera.setRotation(tf::Quaternion(rotation_x,rotation_y,rotation_z,rotation_w));
-			br.sendTransform(tf::StampedTransform(transform_base_marker,ros::Time(time),"base_link","station_charger"));
+			br.sendTransform(tf::StampedTransform(transform_base_marker,ros::Time(time),"base_link","station_charger_after_localization"));
 			ros::Rate rate(1000);
 			// rate.sleep();
 		
 	}
 
 }
+
+
 	
 }
