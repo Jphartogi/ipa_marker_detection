@@ -7,4 +7,3 @@ This package use a standard aruco_marker detection which is based in http://wiki
 We can easily launch the file with
 ```bash
 roslaunch location_finder location_finder.launch
-```bash
