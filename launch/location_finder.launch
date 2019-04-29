@@ -3,19 +3,33 @@
 	<node pkg="location_finder" type="location_finder_node" name="location_finder" output="screen" >
    <param name="publish_frequency" value="1000" />
   </node>
-<!-- 
-  <node pkg="location_finder" type="location_listener_node" name="location_listener_node" output="screen" >
+
+  <node pkg="location_finder" type="location_publisher_node" name="location_publisher_node" output="screen" >
   <param name="publish_frequency" value="1000" />
-  </node> -->
+  </node> 
 
   <node pkg="location_finder" type="service_caller_node" name="service_caller_node" output="screen" >
   <param name="publish_frequency" value="1000" />
   </node>
-
+	
+<!--node pkg="tf" type="static_transform_publisher" name="link2_broadcaster" args="0 0 0.25 0 0 0 1 map base_link 100" /> 
    
-   <!--node pkg="tf" type="static_transform_publisher" name="link1_broadcaster" args="0 -0.0325 1 0 0.3827 0 0.9239 base_link camera_link 100" /--> 
+   <node pkg="tf" type="static_transform_publisher" name="link1_broadcaster" args="0 -0.0325 1 0 0.81915 0 0.57357 base_link camera_link 100" /--> 
 
-	<node pkg="tf" type="static_transform_publisher" name="link2_broadcaster" args="0 2 0 0 0 0 1 map station_charger 100" /> 
+        <node pkg="tf" type="static_transform_publisher" name="link10_broadcaster" args="-0.1 0.8 0 0 0 0 1 map station_charger 100" /> 
+
+    <!-- just for testing  >
+      <node pkg="tf" type="static_transform_publisher" name="link1_broadcaster" args="0.55 -1.415 0.0 0.0 0.0 1.00 -0.019 map person1 100" /> 
+
+      <node pkg="tf" type="static_transform_publisher" name="link2_broadcaster" args="1.086 -5.36 0.0 0.0 0.0 0.744 0.668 map person2 100" /> 
+
+      <node pkg="tf" type="static_transform_publisher" name="link3_broadcaster" args="-0.37 -2.309 0.0 0.0 0.0 0.725 0.689 map person3 100" /> 
+
+      <node pkg="tf" type="static_transform_publisher" name="link4_broadcaster" args="-0.373 -0.643 0.0 0.0 0.0 -0.712 0.702 map person4 100" /> 
+
+      <node pkg="tf" type="static_transform_publisher" name="link5_broadcaster" args="-0.510 -4.047 0.0 0.0 0.0 0.070 0.998 map person5 100" /> 
+      
+      <node pkg="tf" type="static_transform_publisher" name="link6_broadcaster" args="2.513 -4.04 0.0 0.0 0.0 -0.664 0.748 map end_pose 100" /--> 
 
   <!--node type="rviz" name="rviz" pkg="rviz" args="-d $(find location_finder)/rviz/location_finder.rviz"/-->
 

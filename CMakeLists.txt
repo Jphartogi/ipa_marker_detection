@@ -89,6 +89,16 @@ target_link_libraries(service_caller_node
  )
 
 
+ add_executable(location_publisher_node src/location_publisher.cpp)
+
+ add_dependencies(location_publisher_node location_publisher_generate_messages.cpp)
+
+ ## Specify libraries to link a library or executable target against
+
+ target_link_libraries(location_publisher_node
+   ${catkin_LIBRARIES}
+  )
+
 
  ## Mark executables and/or libraries for installation
   install(TARGETS ${PROJECT_NAME} ${PROJECT_NAME}_node

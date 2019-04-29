@@ -42,7 +42,7 @@ void ServiceCaller::Callback(const fiducial_msgs::FiducialTransformArray::Ptr& m
 {
     if (msg->transforms.empty())
 		{
-			// ROS_INFO("NO MARKER DETECTED");
+			//  ROS_INFO("NO MARKER DETECTED");
 		}
 		else{
 		/// when the marker is detected
@@ -51,7 +51,7 @@ void ServiceCaller::Callback(const fiducial_msgs::FiducialTransformArray::Ptr& m
 
 }
 int main(int argc,char** argv){
-	ros::init(argc,argv,"location_finder");
+	ros::init(argc,argv,"service_caller");
 	ros::NodeHandle nh;
 	
 	ServiceCaller ServiceCaller(nh);

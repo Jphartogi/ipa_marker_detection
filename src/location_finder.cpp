@@ -8,8 +8,10 @@ void LocationFinder::Callback(const fiducial_msgs::FiducialTransformArray::Ptr& 
 		/// check if the message is empty
 		if (msg->transforms.empty())
 		{
+			// this is actually initialization part, if no initialization there will be an error
+
 			std_msgs::Header header;
-			double time = msg->header.stamp.toSec(); // get the time from message
+			time = msg->header.stamp.toSec(); // get the time from message
 			// ROS_INFO("No Marker Detected!");
 			static tf::TransformBroadcaster br;
 			tf::Transform trf2;
@@ -56,9 +58,9 @@ void LocationFinder::Callback_2DOF(const geometry_msgs::PoseStamped::Ptr& msg){
 	// int transform[] = {};
 
 		/// check if no marker has detected yet
-		if (msg->pose.position.x < 0.1)
+		if (!marker_detected_)
 		{
-			marker_detected_ = false;
+			
 			static tf::TransformBroadcaster br;
 			tf::Transform trf2;
 			trf2.setOrigin( tf::Vector3(0,0,0));
@@ -68,13 +70,13 @@ void LocationFinder::Callback_2DOF(const geometry_msgs::PoseStamped::Ptr& msg){
 		}
 		else{
 		/// when the marker is detected
-			marker_detected_ = true;
+			
 			///obtain the pose
 			geometry_msgs::Pose pose;
 			double transform_x = msg->pose.position.x;
 			double transform_y = msg->pose.position.y;
 			double yaw= tf::getYaw(msg->pose.orientation);
-
+			
 			tf::TransformBroadcaster br;
 			tf::Transform transform_base_marker;
 			transform_base_marker.setOrigin( tf::Vector3(transform_x,transform_y, 0));
@@ -82,8 +84,10 @@ void LocationFinder::Callback_2DOF(const geometry_msgs::PoseStamped::Ptr& msg){
 			w.setRPY(0,0,yaw);  // set the 2DOF orientation in Roll Pitch and Yaw. The orientation needed is only the yaw.
 			transform_base_marker.setRotation(w);
 		// transform_base_camera.setRotation(tf::Quaternion(rotation_x,rotation_y,rotation_z,rotation_w));
-			br.sendTransform(tf::StampedTransform(transform_base_marker,ros::Time(time),"base_link","station_charger_after_localization"));
+            br.sendTransform(tf::StampedTransform(transform_base_marker,ros::Time(time),"base_link","station_charger_real"));
 			ros::Rate rate(1000);
+
+
 			// rate.sleep();
 		
 	}
