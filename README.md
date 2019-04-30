@@ -57,5 +57,5 @@ roslaunch location_finder location_finder.launch
 ```
 
 ## Topic 
-/Position : The 2DOF position of the marker_pose from the aruco detect to the base_link
+/Position : The 2DOF position of the marker_pose from the aruco detect to the base_link <br />
 /publish_now (service) : Set to true to get the 2DOF pose of the marker in orientation to /map
