@@ -12,24 +12,26 @@ class LocationPublisher
 private:
     ros::Subscriber sub;
     ros::ServiceServer service;
-    bool publish_pose(std_srvs::SetBool::Request &req,
-                      std_srvs::SetBool::Response &res );
     bool publish_now;
     int counter;
-    void Callback(const geometry_msgs::Pose::Ptr& msg);
+
     double transform_x;
     double transform_y;
     double yaw;
+
+    bool publish_pose(std_srvs::SetBool::Request &req,
+                      std_srvs::SetBool::Response &res );
+    void Callback(const geometry_msgs::PoseStamped::Ptr& msg);
 public:
     LocationPublisher(ros::NodeHandle nh);
-    
-    
+
+
 };
 
 
 LocationPublisher::LocationPublisher(ros::NodeHandle nh)
 {
-    sub = nh.subscribe("marker_pose_2D",10,&LocationPublisher::Callback,this);
+    sub = nh.subscribe("marker_pose_map",10,&LocationPublisher::Callback,this);
     service = nh.advertiseService("publish_now", &LocationPublisher::publish_pose,this);
     publish_now = false;
     counter = 0;
@@ -42,6 +44,7 @@ bool LocationPublisher::publish_pose(std_srvs::SetBool::Request &req,
             publish_now = true;
             res.success = true;
             res.message = "service is called successfully";
+	          counter = 0; // reset the counter so taking a new value of the marker pose
             return true;
 			}
 		else
@@ -55,29 +58,26 @@ bool LocationPublisher::publish_pose(std_srvs::SetBool::Request &req,
 
 
 
-void LocationPublisher::Callback(const geometry_msgs::Pose::Ptr& msg)
+void LocationPublisher::Callback(const geometry_msgs::PoseStamped::Ptr& msg)
 {
     if (publish_now == true) {
-        
+
         // for taking the data just once
-        if (counter < 1 ) {
+		if ( counter < 1)
+		{
+
             /// when the marker is detected
-			
+
 			///obtain the pose
 			geometry_msgs::Pose pose;
 
-			transform_x = msg->position.x;
-			transform_y = msg->position.y;
-			yaw= tf::getYaw(msg->orientation);
-			ROS_INFO("taking only the first pose!, taking the pose ..");
-            std::cout << "the value " << transform_x << ", " << transform_y << "," << yaw << std::endl;
-            counter = counter + 1;
-            
-        }
-        else
-        {
-               // double time = msg.header.stamp;
-            
+			transform_x = msg->pose.position.x;
+			transform_y = msg->pose.position.y;
+			yaw= tf::getYaw(msg->pose.orientation);
+			counter = counter + 1;
+
+		}
+		else{
 			static tf::TransformBroadcaster br;
 			tf::Transform transform_marker_map;
 			transform_marker_map.setOrigin( tf::Vector3(transform_x,transform_y, 0));
@@ -86,20 +86,14 @@ void LocationPublisher::Callback(const geometry_msgs::Pose::Ptr& msg)
 			transform_marker_map.setRotation(w);
 		// transform_base_camera.setRotation(tf::Quaternion(rotation_x,rotation_y,rotation_z,rotation_w));
             br.sendTransform(tf::StampedTransform(transform_marker_map,ros::Time::now(),"map","station_charger_map_based"));
-			
-            std::cout << "the at else " << transform_x << ", " << transform_y << "," << yaw << std::endl;
-            ROS_INFO("now publishing the pose!");
-        }
-        
-        
-        
+		}
     }
     else
     {
         ROS_INFO("waiting for service!");
     }
-    
-    
+
+
 }
 
 int main(int argc, char** argv)
