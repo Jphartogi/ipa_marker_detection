@@ -60,7 +60,11 @@ bool LocationPublisher::publish_pose(std_srvs::SetBool::Request &req,
 
 void LocationPublisher::Callback(const geometry_msgs::PoseStamped::Ptr& msg)
 {
+<<<<<<< HEAD
+    if (publish_now == true) { // when the service is called
+=======
     if (publish_now == true) {
+>>>>>>> c87e2e50b92218514a0bd4230a098f377d8f7fd6
 
         // for taking the data just once
 		if ( counter < 1)
@@ -74,7 +78,11 @@ void LocationPublisher::Callback(const geometry_msgs::PoseStamped::Ptr& msg)
 			transform_x = msg->pose.position.x;
 			transform_y = msg->pose.position.y;
 			yaw= tf::getYaw(msg->pose.orientation);
+<<<<<<< HEAD
+			counter = counter + 1;  // used for only taking data once and but keep publishing at constant rate!
+=======
 			counter = counter + 1;
+>>>>>>> c87e2e50b92218514a0bd4230a098f377d8f7fd6
 
 		}
 		else{
@@ -85,7 +93,11 @@ void LocationPublisher::Callback(const geometry_msgs::PoseStamped::Ptr& msg)
 			w.setRPY(0,0,yaw);  // set the 2DOF orientation in Roll Pitch and Yaw. The orientation needed is only the yaw.
 			transform_marker_map.setRotation(w);
 		// transform_base_camera.setRotation(tf::Quaternion(rotation_x,rotation_y,rotation_z,rotation_w));
+<<<<<<< HEAD
+            br.sendTransform(tf::StampedTransform(transform_marker_map,ros::Time::now(),"map","station_charger_2DOF"));
+=======
             br.sendTransform(tf::StampedTransform(transform_marker_map,ros::Time::now(),"map","station_charger_map_based"));
+>>>>>>> c87e2e50b92218514a0bd4230a098f377d8f7fd6
 		}
     }
     else

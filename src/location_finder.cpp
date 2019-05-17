@@ -14,10 +14,15 @@ void LocationFinder::Callback(const fiducial_msgs::FiducialTransformArray::Ptr& 
 		if (msg->transforms.empty())
 		{
 			marker_detected_ = false;
+<<<<<<< HEAD
+			
+=======
 			// this is actually initialization part, if no initialization there will be an error
 
+>>>>>>> c87e2e50b92218514a0bd4230a098f377d8f7fd6
 			std_msgs::Header header;
 			time = msg->header.stamp.toSec(); // get the time from message
+
 			// ROS_INFO("No Marker Detected!");
 			static tf::TransformBroadcaster br;
 			tf::Transform trf2;
@@ -28,7 +33,11 @@ void LocationFinder::Callback(const fiducial_msgs::FiducialTransformArray::Ptr& 
 				trf2.setRotation(tf::Quaternion(0,0,0,1)); //
 			}
 
+<<<<<<< HEAD
+			else { // when the marker is already detected at least once  but goes out of frame
+=======
 			else { // when the marker is already detected but goes out of frame
+>>>>>>> c87e2e50b92218514a0bd4230a098f377d8f7fd6
 
 				ros::Time time_after_publish;
 				time_after_publish = ros::Time::now();
@@ -64,7 +73,8 @@ void LocationFinder::Callback(const fiducial_msgs::FiducialTransformArray::Ptr& 
 			 rotation_z = msg->transforms[0].transform.rotation.z;
 			 rotation_w = msg->transforms[0].transform.rotation.w;
 			// ROS_INFO("x: %f,y: %f,z: %f,w: %f",rotation_x,rotation_y,rotation_z,rotation_w);
-			// obtain the time
+
+			
 			std_msgs::Header header;
 		 	ros::Time time_after_publish;
 
@@ -94,7 +104,11 @@ void LocationFinder::Callback(const fiducial_msgs::FiducialTransformArray::Ptr& 
 
 void LocationFinder::Callback_2DOF(const geometry_msgs::PoseStamped::Ptr& msg){
 	// int transform[] = {};
+<<<<<<< HEAD
+		double time_2DOF = msg->header.stamp.toSec(); // get the time from message
+=======
 		double waktu = msg->header.stamp.toSec(); // get the time from message
+>>>>>>> c87e2e50b92218514a0bd4230a098f377d8f7fd6
 		
 		/// check if no marker has detected yet
 		if (!marker_detected_)
@@ -111,7 +125,15 @@ void LocationFinder::Callback_2DOF(const geometry_msgs::PoseStamped::Ptr& msg){
 				trf2.setOrigin( tf::Vector3(0,0,0));
 				trf2.setRotation(tf::Quaternion(0,0,0,1));   // set transform to 0 but not publishing!
 			}
+<<<<<<< HEAD
+			else { // when the marker is already detected at least once  but goes out of frame
+
+			// this part needs to be fixed as when the marker is no longer detected, it needs to publish a TF according to map frame!!
+
+			//there is already a code, location_publisher, which can publish a TF according to map, only need to call the service, it will publish a TF according to the last time the marker was detected
+=======
 			else {
+>>>>>>> c87e2e50b92218514a0bd4230a098f377d8f7fd6
 
 				trf2.setOrigin( tf::Vector3(trans_x,trans_y, 0));
 				tf::Quaternion w;

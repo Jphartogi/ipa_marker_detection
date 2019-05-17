@@ -7,10 +7,17 @@ namespace ipa_location_finder
  {
    // take the time when the TF is already published
 
+<<<<<<< HEAD
+   double time_now = msg->stamp.toSec(); 
+
+
+   listenToTF(time_now); // send the time for the listener so it listen only when the TF is already published
+=======
    double time_now = msg->stamp.toSec();
 
 
    listenToTF(time_now);
+>>>>>>> c87e2e50b92218514a0bd4230a098f377d8f7fd6
 
  }
 
@@ -21,7 +28,12 @@ namespace ipa_location_finder
    double time_now2 = msg->stamp.toSec();
 
 
+<<<<<<< HEAD
+   listenToTF2(time_now2); // send the time for the listener so it listen only when the TF is already published
+
+=======
    listenToTF2(time_now2);
+>>>>>>> c87e2e50b92218514a0bd4230a098f377d8f7fd6
 
  }
 
@@ -108,4 +120,8 @@ namespace ipa_location_finder
 }
 
 
+<<<<<<< HEAD
  
+=======
+ 
+>>>>>>> c87e2e50b92218514a0bd4230a098f377d8f7fd6
