@@ -51,7 +51,13 @@ source ~/.bashrc
 ```
 
 ## Launching the file
-We can easily launch the file with
+To launch the camera and aruco detection
+```bash
+roslaunch location_finder camera.launch
+```
+To launch the TF publisher for the marker and the transformed marker
 ```bash
 roslaunch location_finder location_finder.launch
 ```
+
+
