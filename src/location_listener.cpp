@@ -32,10 +32,9 @@ namespace ipa_location_finder
   tf::StampedTransform echo_transform;
   geometry_msgs::PoseStamped ps;
 
-  try
+      try
       {
         //listen to a transform from base link to the marker itself
-        // Wait for up to one second for the first transforms to become avaiable.
         // listener.waitForTransform("/base_link", "/marker_pose", ros::Time(time_now), ros::Duration(0.5));
         listener.lookupTransform("/base_link", "/marker_pose", ros::Time(time_now), echo_transform);
        }
@@ -60,7 +59,7 @@ namespace ipa_location_finder
       ps.pose.orientation.y = q.getY();
       ps.pose.orientation.z = q.getZ();
 
-      ps.header.stamp = ros::Time::now();
+      ps.header.stamp = ros::Time::now(); // send time after success listen to TF
 
       double time_after_listen = ros::Time::now().toSec();
       // ROS_INFO("time after listen base marker %f",time_after_listen);
@@ -74,10 +73,9 @@ namespace ipa_location_finder
 
   tf::StampedTransform marker_base_transform;
   geometry_msgs::PoseStamped ps;
-  try
+    try
       {
         //listen to a transform from base link to the marker itself
-        // Wait for up to one second for the first transforms to become avaiable.
         // listener.waitForTransform("/base_link", "/marker_pose", ros::Time(time), ros::Duration(0));
         listener.lookupTransform("/map", "/station_charger_2DOF", ros::Time(time_now), marker_base_transform);
        }
@@ -101,7 +99,10 @@ namespace ipa_location_finder
       ps.pose.orientation.x = q.getX();
       ps.pose.orientation.y = q.getY();
       ps.pose.orientation.z = q.getZ();
-   
+
+
+      ps.header.stamp = ros::Time::now();  // send time after success listen to TF
+
       pose_pub_.publish(ps);
     
 

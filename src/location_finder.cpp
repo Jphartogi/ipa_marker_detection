@@ -114,7 +114,7 @@ void LocationFinder::Callback_2DOF(const geometry_msgs::PoseStamped::Ptr& msg){
 			}
 			else { // when the marker is already detected at least once  but goes out of frame
 
-			// this part needs to be fixed as when the marker is no longer detected, it needs to publish a TF according to map frame!!
+			// this part needs to be fixed as when the marker is no longer detected, it needs to publish a TF according to map frame!! So it not move with the base_link
 
 			//there is already a code, location_publisher, which can publish a TF according to map, only need to call the service, it will publish a TF according to the last time the marker was detected
 
