@@ -24,12 +24,10 @@ class LocationListener
 {
 private:
   ros::Publisher pub;
-  ros::Subscriber sub;
-  ros::Subscriber sub2;
+  ros::Subscriber time_sub;
+  ros::Subscriber time_sub2;
   tf::TransformListener listener;
   tf::TransformListener listener_map;
-  ros::ServiceServer service;
-  ros::Publisher twist_publisher_;
   ros::Publisher pose_pub_;
 
   void Callback(const std_msgs::Header::Ptr& msg);
@@ -45,8 +43,8 @@ public:
     LocationListener(ros::NodeHandle nh){
     pub = nh.advertise<geometry_msgs::PoseStamped>("marker_pose_2D", 100);
     pose_pub_ = nh.advertise<geometry_msgs::PoseStamped>("marker_pose_map", 100);
-    sub = nh.subscribe("time_after_pub_2DOF",10,&LocationListener::Callback,this);
-    sub2 = nh.subscribe("time_after_pub_2DOF_real",10,&LocationListener::Callback2,this);
+    time_sub = nh.subscribe("time_after_pub_2DOF",10,&LocationListener::Callback,this);
+    time_sub2 = nh.subscribe("time_after_pub_2DOF_real",10,&LocationListener::Callback2,this);
     }
 
 };
@@ -74,8 +72,7 @@ private:
 		
 		ros::Subscriber sub;
 		ros::Subscriber sub2;
-    ros::Subscriber sub3;
-
+    
     void Callback(const fiducial_msgs::FiducialTransformArray::Ptr& msg);
     void Callback_2DOF(const geometry_msgs::PoseStamped::Ptr& msg);
     
@@ -83,7 +80,7 @@ private:
 public:
     LocationFinder(ros::NodeHandle nh)
     {
-      // initialize the TF
+      // initialize the points for TF publisher
       transform_x = 0; transform_y = 0; transform_z = 0;
       rotation_x = 0; rotation_y = 0; rotation_z = 0; rotation_w = 0;
 
@@ -96,7 +93,7 @@ public:
       time_pub2 = nh.advertise<std_msgs::Header>("time_after_pub_2DOF_real",10);
       sub = nh.subscribe("fiducial_transforms",10,&LocationFinder::Callback,this); //subscribe to a publish message from fiducial transforms which is published from the aruco_detect
 	    sub2 = nh.subscribe("marker_pose_2D",10,&LocationFinder::Callback_2DOF,this); // subscribe to a publish message from a Position , that is published in location_listener.cpp
-      // sub3 = nh.subscribe("marker_pose_map",10,&LocationFinder::Callback_Map,this);
+      
     }
 
 };

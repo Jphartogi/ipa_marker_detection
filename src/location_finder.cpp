@@ -13,7 +13,7 @@ void LocationFinder::Callback(const fiducial_msgs::FiducialTransformArray::Ptr& 
 		/// check if the message is empty
 		if (msg->transforms.empty())
 		{
-			marker_detected_ = false;
+			marker_detected_ = false; // set status to false
 			
 			std_msgs::Header header;
 			time = msg->header.stamp.toSec(); // get the time from message
@@ -28,7 +28,13 @@ void LocationFinder::Callback(const fiducial_msgs::FiducialTransformArray::Ptr& 
 				trf2.setRotation(tf::Quaternion(0,0,0,1)); //
 			}
 
-			else { // when the marker is already detected at least once  but goes out of frame
+			else {
+				// when the marker is already detected at least once  but goes out of frame
+
+			// this part needs to be fixed as when the marker is no longer detected, it needs to publish a TF according to map frame!! So it won't move with the base_link
+
+			//there is already a code, location_publisher, which can publish a TF according to map, only need to call the service, it will publish a TF according to the last time the marker was detected
+
 
 				ros::Time time_after_publish;
 				time_after_publish = ros::Time::now();
@@ -109,12 +115,12 @@ void LocationFinder::Callback_2DOF(const geometry_msgs::PoseStamped::Ptr& msg){
 
 			if (counter < 1) {
 
-				trf2.setOrigin( tf::Vector3(0,0,0));
+				trf2.setOrigin(tf::Vector3(0,0,0));
 				trf2.setRotation(tf::Quaternion(0,0,0,1));   // set transform to 0 but not publishing!
 			}
 			else { // when the marker is already detected at least once  but goes out of frame
 
-			// this part needs to be fixed as when the marker is no longer detected, it needs to publish a TF according to map frame!! So it not move with the base_link
+			// this part needs to be fixed as when the marker is no longer detected, it needs to publish a TF according to map frame!! So it won't move with the base_link
 
 			//there is already a code, location_publisher, which can publish a TF according to map, only need to call the service, it will publish a TF according to the last time the marker was detected
 
@@ -155,8 +161,7 @@ void LocationFinder::Callback_2DOF(const geometry_msgs::PoseStamped::Ptr& msg){
 			// transform_base_camera.setRotation(tf::Quaternion(rotation_x,rotation_y,rotation_z,rotation_w));
       		br.sendTransform(tf::StampedTransform(transform_base_marker,ros::Time(time_after_publish_float),"base_link","station_charger_2DOF"));
 			ros::Rate rate(1000);
-
-
+			
 			
 			// publish the time after TF is published
 			header.stamp = t;

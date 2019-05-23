@@ -44,8 +44,7 @@ namespace ipa_location_finder
          ros::Duration(0.1).sleep();
 
       }
-      // double yaw, pitch, roll;
-      // echo_transform.getBasis().getRPY(roll, pitch, yaw);
+   
       tf::Quaternion q = echo_transform.getRotation();
       tf::Vector3 v = echo_transform.getOrigin();
       geometry_msgs::Pose pose;
@@ -54,7 +53,7 @@ namespace ipa_location_finder
       ps.pose.position.y = v.getY();
       ps.pose.position.z = 0;
 
-      ps.pose.orientation.w = q.getW(); //take value of yaw to be inserted one of quaternion
+      ps.pose.orientation.w = q.getW(); 
       ps.pose.orientation.x = q.getX();
       ps.pose.orientation.y = q.getY();
       ps.pose.orientation.z = q.getZ();
@@ -85,17 +84,16 @@ namespace ipa_location_finder
          ros::Duration(0.1).sleep();
          
       }
-      // double yaw, pitch, roll;
-      // echo_transform.getBasis().getRPY(roll, pitch, yaw);
+ 
       tf::Quaternion q = marker_base_transform.getRotation();
       tf::Vector3 v = marker_base_transform.getOrigin();
       
-      // fiducial_msgs::FiducialTransform ft;
+      
       ps.pose.position.x = v.getX();
       ps.pose.position.y = v.getY();
       ps.pose.position.z = 0;
 
-      ps.pose.orientation.w = q.getW(); //take value of yaw to be inserted one of quaternion
+      ps.pose.orientation.w = q.getW(); 
       ps.pose.orientation.x = q.getX();
       ps.pose.orientation.y = q.getY();
       ps.pose.orientation.z = q.getZ();

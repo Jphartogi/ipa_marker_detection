@@ -44,7 +44,7 @@ bool LocationPublisher::publish_pose(std_srvs::SetBool::Request &req,
             publish_now = true;
             res.success = true;
             res.message = "service is called successfully";
-	          counter = 0; // reset the counter so taking a new value of the marker pose
+	        counter = 0; // reset the counter so taking a new value of the marker pose in orientation to map
             return true;
 			}
 		else
@@ -66,10 +66,7 @@ void LocationPublisher::Callback(const geometry_msgs::PoseStamped::Ptr& msg)
 		if ( counter < 1)
 		{
 
-            /// when the marker is detected
-
-			///obtain the pose
-			geometry_msgs::Pose pose;
+            geometry_msgs::Pose pose;
 
 			transform_x = msg->pose.position.x;
 			transform_y = msg->pose.position.y;
@@ -84,7 +81,6 @@ void LocationPublisher::Callback(const geometry_msgs::PoseStamped::Ptr& msg)
 			tf::Quaternion w;
 			w.setRPY(0,0,yaw);  // set the 2DOF orientation in Roll Pitch and Yaw. The orientation needed is only the yaw.
 			transform_marker_map.setRotation(w);
-		// transform_base_camera.setRotation(tf::Quaternion(rotation_x,rotation_y,rotation_z,rotation_w));
             br.sendTransform(tf::StampedTransform(transform_marker_map,ros::Time::now(),"map","station_charger_2DOF"));
 		}
     }

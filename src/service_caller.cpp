@@ -6,6 +6,16 @@
 #include <fiducial_msgs/FiducialArray.h>
 #include <std_srvs/SetBool.h>
 
+/*
+
+This is the code for calling the service with code, this can be modified so 
+calling the service is not done manually within the terminal
+and can be called in cerain situation, for example the docking can be called when 
+there is marker detected, if no marker detected, docking is not called
+
+*/
+
+
 class ServiceCaller
 {
 private:
@@ -55,7 +65,7 @@ void ServiceCaller::publishNow(){
 
 }
 void ServiceCaller::Dock(){
-
+		// calling the service of docking
 		cob_srvs::SetString srv;
 		bool goal_status = srv.response.success;
 		if (goal_status) {
