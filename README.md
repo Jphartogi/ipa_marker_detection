@@ -51,6 +51,9 @@ source ~/.bashrc
 ```
 
 ## Launching the file
+
+!! for MobiKa, launch the location_finder.launch in robot, and the camera.launch in the NUC. So that the TF publisher will not suffer from time synchronization problem.
+
 To launch the camera and aruco detection
 ```bash
 roslaunch location_finder camera.launch
